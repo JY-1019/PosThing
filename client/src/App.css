@@ -1,0 +1,16 @@
+body {
+  padding: 20px;
+}
+
+.sticky-btn {
+  padding: 10px;
+  background: grey;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+}
+
+.sticky-btn:hover {
+  opacity: 0.8;
+}
