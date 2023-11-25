@@ -1,53 +1,57 @@
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
+import registDragEvent from "./Drag";
+import ReSize from "./Resize";
+import QuillEditor from "../editor/QuillEditor";
+
+import { inrange } from "../../utils/index";
+import { DEFAULT_W, DEFAULT_H, BOUNDARY_MARGIN } from "../../config";
+
 import "./StickyNote.css";
 
-function StickyNote({ onClose }) {
-  const [allowMove, setAllowMove] = useState(false);
+export default function StickyNote({ onClose }) {
   const stickyNoteRef = useRef(null);
-  const [dx, setDx] = useState(0);
-  const [dy, setDy] = useState(0);
+  const [{ x, y, w, h }, setPosition] = useState({ x: 0, y: 0 });
 
-  function hanldelMouseDown(e) {
-    setAllowMove(true);
-    const dimensions = stickyNoteRef.current.getBoundingClientRect();
-    setDx(e.clientX - dimensions.x);
-    setDy(e.clientY - dimensions.y);
-  }
+  useEffect(() => {
+    const centerX = window.innerWidth / 2 - 80;
+    const centerY = window.innerHeight / 2 - 100;
 
-  function handleMouseMove(e) {
-    if (allowMove) {
-      // Move the sticky note
-      console.log("Allow move");
-      const x = e.clientX - dx;
-      const y = e.clientY - dy;
-      console.log("inside mouse move", x, y);
-      stickyNoteRef.current.style.left = x + "px";
-      stickyNoteRef.current.style.top = y + "px";
-    }
-  }
-
-  function handleMouseUp() {
-    setAllowMove(false);
-  }
+    setPosition({ x: centerX, y: centerY, w: DEFAULT_W, h: DEFAULT_H });
+  }, []);
 
   return (
-    <div className="sticky-note" ref={stickyNoteRef}>
+    <div
+      className="absolute"
+      style={{ transform: `translateX(${x}px) translateY(${y}px)` }}
+    >
       <div
-        className="sticky-note-header"
-        onMouseDown={hanldelMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
+        className="sticky-note"
+        ref={stickyNoteRef}
+        style={{ width: w, height: h, left: x, top: y }}
+        {...registDragEvent((deltaX, deltaY) => {
+          setPosition({
+            x: inrange(
+              x + deltaX,
+              BOUNDARY_MARGIN,
+              window.innerWidth - w - BOUNDARY_MARGIN
+            ),
+            y: inrange(
+              y + deltaY,
+              BOUNDARY_MARGIN,
+              window.innerHeight - h - BOUNDARY_MARGIN
+            ),
+            w,
+            h,
+          });
+        }, true)}
       >
-        <div>Sticky Note</div>
-        <div className="close" onClick={onClose}>
-          &times;
+        <div className="flex justify-between mx-1">
+          <div className="px-1 cursor-pointer" onClick={onClose}>
+            &times;
+          </div>
         </div>
       </div>
-
-      {/* It should be a textEditor */}
-      <textarea className="sticky-note-body"></textarea>
+      <ReSize props={{ x, y, w, h, setPosition }} />
     </div>
   );
 }
-
-export default StickyNote;
