@@ -1,0 +1,70 @@
+version: "3"
+services:
+  client:
+    build:
+      dockerfile: dockerfile.dev
+      context: ./client
+    container_name: posthing_client
+    volumes:
+      - /app/node_modules
+      - ./frontend:/app
+    stdin_open: true
+
+  signal:
+    build:
+      dockerfile: dockerfile.dev
+      context: ./signal
+    container_name: posthing_signal
+    volumes:
+      - /app/node_modules
+      - ./signal:/app
+    stdin_open: true
+
+  nginx:
+    restart: always
+    build:
+      dockerfile: dockerfile.dev
+      context: ./nginx
+    container_name: posthing_proxy
+    ports:
+      - "3000:80"
+
+  backend:
+    build:
+      dockerfile: dockerfile.dev
+      context: ./backend
+    container_name: posthing_backend
+    volumes:
+      - ./backend:/app
+    environment:
+      MYSQL_ROOT_PASSWORD: toy0koy
+      MYSQL_DATABASE: posthing-dev
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PORT: 3306
+
+  mysql:
+    build: ./mysql
+    restart: unless-stopped
+    container_name: posthing_mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/mysql_data:/var/lib/mysql
+      - ./mysql/sqls/:/docker-entrypoint-initdb.d/
+    environment:
+      MYSQL_ROOT_PASSWORD: toy0koy
+      MYSQL_DATABASE: posthing-dev
+
+  # There is no Dockerfile for Mongo Image in ./mongo
+  mongo:
+    image: mongo:5.0
+    restart: unless-stopped
+    container_name: posthing_mongo
+    ports:
+      - "27017:27017"
+      - ./mongodb/data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: toy0koy
+      MONGO_INITDB_DATABASE: posthing-dev

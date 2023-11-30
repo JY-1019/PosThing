@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { imagePaste } from "./io/ImagePaste";
 import StickyNote from "./components/sticky-note/StickyNote";
 
 function App() {

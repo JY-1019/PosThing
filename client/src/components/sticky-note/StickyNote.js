@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import registDragEvent from "./Drag";
-import ReSize from "./Resize";
-import QuillEditor from "../editor/QuillEditor";
+import registDragEvent from "../../interaction/Drag";
+import ReSize from "../../interaction/Resize";
 
 import { inrange } from "../../utils/index";
 import { DEFAULT_W, DEFAULT_H, BOUNDARY_MARGIN } from "../../config";
@@ -21,10 +20,13 @@ export default function StickyNote({ onClose }) {
 
   return (
     <div
-      className="absolute"
+      className="absolute bg-transparent"
       style={{ transform: `translateX(${x}px) translateY(${y}px)` }}
     >
-      <div
+      <div className="px-1 cursor-pointer" onClick={onClose}>
+        &times;
+      </div>
+      <textarea
         className="sticky-note"
         ref={stickyNoteRef}
         style={{ width: w, height: h, left: x, top: y }}
@@ -45,12 +47,13 @@ export default function StickyNote({ onClose }) {
           });
         }, true)}
       >
+        {/* 
         <div className="flex justify-between mx-1">
           <div className="px-1 cursor-pointer" onClick={onClose}>
             &times;
           </div>
-        </div>
-      </div>
+        </div> */}
+      </textarea>
       <ReSize props={{ x, y, w, h, setPosition }} />
     </div>
   );

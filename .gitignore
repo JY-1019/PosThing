@@ -1,1 +1,7 @@
 /client/node_modules
+/signal/node_modules
+/server/venv
+/server/.idea
+/mongo/mongo_data
+/mysql/mysql_data
+*.env

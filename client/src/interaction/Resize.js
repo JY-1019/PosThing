@@ -1,7 +1,7 @@
 import React from "react";
 import registDragEvent from "./Drag";
-import { inrange } from "../../utils/index";
-import { MIN_W, MIN_H, BOUNDARY_MARGIN } from "../../config";
+import { inrange } from "../utils/index";
+import { MIN_W, MIN_H, BOUNDARY_MARGIN } from "../config";
 
 export default function Resize({ props }) {
   const { x, y, w, h, setPosition } = props;

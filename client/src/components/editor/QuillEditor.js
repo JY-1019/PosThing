@@ -11,7 +11,7 @@ export default function QuillEditor() {
     wrapper.innerHTML = "";
     const editor = document.createElement("div");
     wrapper.append(editor);
-    new Quil(editor, { theme: "bubble" });
+    new Quil(editor, { theme: "snow" });
   }, []);
 
   return <div ref={wrapperRef}></div>;

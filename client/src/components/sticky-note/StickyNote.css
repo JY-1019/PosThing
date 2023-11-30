@@ -4,6 +4,6 @@
 
 @layer components {
   .sticky-note {
-    @apply h-full w-full cursor-move rounded-xl bg-white shadow-xl ring-1 ring-gray-100 transition-[shadow,transform] active:scale-95 active:shadow-lg;
+    @apply h-full w-full cursor-move rounded-sm bg-transparent hover:shadow-md hover:ring-1 hover:ring-gray-100 hover:ring-gray-200 focus:outline-gray-200 transition-[shadow,transform] active:scale-95 active:shadow-sm p-2 resize-none;
   }
 }
