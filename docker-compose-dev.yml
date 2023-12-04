@@ -2,7 +2,7 @@ version: "3"
 services:
   client:
     build:
-      dockerfile: dockerfile.dev
+      dockerfile: Dockerfile.dev
       context: ./client
     container_name: posthing_client
     volumes:
@@ -12,7 +12,7 @@ services:
 
   signal:
     build:
-      dockerfile: dockerfile.dev
+      dockerfile: Dockerfile.dev
       context: ./signal
     container_name: posthing_signal
     volumes:
@@ -23,15 +23,16 @@ services:
   nginx:
     restart: always
     build:
-      dockerfile: dockerfile.dev
+      dockerfile: Dockerfile.dev
       context: ./nginx
     container_name: posthing_proxy
+    # Watch The api Simple for port
     ports:
       - "3000:80"
 
   backend:
     build:
-      dockerfile: dockerfile.dev
+      dockerfile: Dockerfile.dev
       context: ./backend
     container_name: posthing_backend
     volumes:
@@ -63,6 +64,7 @@ services:
     container_name: posthing_mongo
     ports:
       - "27017:27017"
+    volumes:
       - ./mongodb/data:/data/db
     environment:
       MONGO_INITDB_ROOT_USERNAME: root

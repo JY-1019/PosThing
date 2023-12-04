@@ -1,7 +1,5 @@
 # Base image with Python and dependencies installed
-FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9 as base
-
-FROM base as dev
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9
 
 COPY ./app /app
 WORKDIR /app
@@ -12,4 +10,4 @@ ENV PORT=8080
 
 EXPOSE 8080
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
